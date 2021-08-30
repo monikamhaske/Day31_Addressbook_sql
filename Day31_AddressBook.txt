@@ -1,0 +1,180 @@
+#UC1
+mysql> create database Address_Book_Services;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> show databases;
++-----------------------+
+| Database              |
++-----------------------+
+| address_book_services |
+| addressbookservice    |
+| information_schema    |
+| monikadb              |
+| mysql                 |
+| payroll_service       |
+| performance_schema    |
+| sys                   |
++-----------------------+
+8 rows in set (0.02 sec)
+
+mysql> use address_book_services;
+Database changed
+
+#UC2
+mysql> create table Address_book(
+    -> id int unsigned not null auto_increment,
+    -> fname varchar(15) not null,
+    -> lname varchar(10) not null,
+    -> city varchar(50) not null,
+    -> state varchar(50) not null,
+    -> zip int not null,
+    -> phone long not null,
+    -> email varchar(100) not null,
+    -> primary key(id)
+    -> );
+
+mysql> desc address_book;
++-------+--------------+------+-----+---------+----------------+
+| Field | Type         | Null | Key | Default | Extra          |
++-------+--------------+------+-----+---------+----------------+
+| id    | int unsigned | NO   | PRI | NULL    | auto_increment |
+| fname | varchar(15)  | NO   |     | NULL    |                |
+| lname | varchar(10)  | NO   |     | NULL    |                |
+| city  | varchar(50)  | NO   |     | NULL    |                |
+| state | varchar(50)  | NO   |     | NULL    |                |
+| zip   | int          | NO   |     | NULL    |                |
+| phone | mediumtext   | NO   |     | NULL    |                |
+| email | varchar(100) | NO   |     | NULL    |                |
++-------+--------------+------+-----+---------+----------------+
+8 rows in set (0.01 sec)
+
+#UC3
+mysql> insert into address_book(fname,lname,city,state,zip,phone,email) values
+    -> ('monika','mhaske','pune','Maharashtra',414604,8830503111,'monikamhaske46@gmail.com'),
+    -> ('arti','kamble','nagar','gujrat',444444,7777775678,'artik12@gmail.com'),
+    -> ('mayuri','mule','aurangabad','kolkata',999999,6785457234,'mayurim23@gmail.com');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from address_book;
++----+--------+--------+------------+-------------+--------+------------+--------------------------+
+| id | fname  | lname  | city       | state       | zip    | phone      | email                    |
++----+--------+--------+------------+-------------+--------+------------+--------------------------+
+|  1 | monika | mhaske | pune       | Maharashtra | 414604 | 8830503111 | monikamhaske46@gmail.com |
+|  2 | arti   | kamble | nagar      | gujrat      | 444444 | 7777775678 | artik12@gmail.com        |
+|  3 | mayuri | mule   | aurangabad | kolkata     | 999999 | 6785457234 | mayurim23@gmail.com      |
++----+--------+--------+------------+-------------+--------+------------+--------------------------+
+3 rows in set (0.00 sec)
+
+UC4
+mysql> update address_book
+    -> set city = 'Mumbai',
+    -> state = 'Krnataka',
+    -> zip = 564578
+    -> where fname = 'mayuri';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from address_book;
++----+--------+--------+--------+-------------+--------+------------+--------------------------+
+| id | fname  | lname  | city   | state       | zip    | phone      | email                    |
++----+--------+--------+--------+-------------+--------+------------+--------------------------+
+|  1 | monika | mhaske | pune   | Maharashtra | 414604 | 8830503111 | monikamhaske46@gmail.com |
+|  2 | arti   | kamble | nagar  | gujrat      | 444444 | 7777775678 | artik12@gmail.com        |
+|  3 | mayuri | mule   | Mumbai | Krnataka    | 564578 | 6785457234 | mayurim23@gmail.com      |
++----+--------+--------+--------+-------------+--------+------------+--------------------------+
+3 rows in set (0.02 sec)
+
+#UC5
+mysql> delete from address_book
+    -> where fname = 'arti';
+Query OK, 1 row affected (0.01 sec)
+mysql> select * from address_book;
++----+--------+--------+--------+-------------+--------+------------+--------------------------+
+| id | fname  | lname  | city   | state       | zip    | phone      | email                    |
++----+--------+--------+--------+-------------+--------+------------+--------------------------+
+|  1 | monika | mhaske | pune   | Maharashtra | 414604 | 8830503111 | monikamhaske46@gmail.com |
+|  3 | mayuri | mule   | Mumbai | Krnataka    | 564578 | 6785457234 | mayurim23@gmail.com      |
++----+--------+--------+--------+-------------+--------+------------+--------------------------+
+2 rows in set (0.00 sec)
+
+# UC6
+mysql> select * from address_book
+    -> where city ='pune' or state = 'Maharashtra';
++----+--------+--------+------+-------------+--------+------------+--------------------------+
+| id | fname  | lname  | city | state       | zip    | phone      | email                    |
++----+--------+--------+------+-------------+--------+------------+--------------------------+
+|  1 | monika | mhaske | pune | Maharashtra | 414604 | 8830503111 | monikamhaske46@gmail.com |
++----+--------+--------+------+-------------+--------+------------+--------------------------+
+1 row in set (0.00 sec)
+
+UC7
+mysql> select count(city or state)
+    -> from address_book;
++----------------------+
+| count(city or state) |
++----------------------+
+|                    2 |
++----------------------+
+1 row in set (0.00 sec)
+
+UC9
+mysql> update  Address_book set type='Family' where fname ='monika';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from address_book;
++----+--------+--------+--------+--------+-------------+--------+------------+--------------------------+
+| id | fname  | lname  | type   | city   | state       | zip    | phone      | email                    |
++----+--------+--------+--------+--------+-------------+--------+------------+--------------------------+
+|  1 | monika | mhaske | Family | pune   | Maharashtra | 414604 | 8830503111 | monikamhaske46@gmail.com |
+|  3 | mayuri | mule   | NULL   | Mumbai | Krnataka    | 564578 | 6785457234 | mayurim23@gmail.com      |
++----+--------+--------+--------+--------+-------------+--------+------------+--------------------------+
+2 rows in set (0.00 sec)
+mysql> update  Address_book set type='Friends' where fname  ='mayuri';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from address_book;
++----+--------+--------+---------+--------+-------------+--------+------------+--------------------------+
+| id | fname  | lname  | type    | city   | state       | zip    | phone      | email                    |
++----+--------+--------+---------+--------+-------------+--------+------------+--------------------------+
+|  1 | monika | mhaske | Family  | pune   | Maharashtra | 414604 | 8830503111 | monikamhaske46@gmail.com |
+|  3 | mayuri | mule   | Friends | Mumbai | Krnataka    | 564578 | 6785457234 | mayurim23@gmail.com      |
++----+--------+--------+---------+--------+-------------+--------+------------+--------------------------+
+2 rows in set (0.00 sec)
+
+Uc10
+mysql> SELECT COUNT(type) AS Number_Of_Contact_Person
+    -> FROM Address_book;
++--------------------------+
+| Number_Of_Contact_Person |
++--------------------------+
+|                        2 |
++--------------------------+
+1 row in set (0.00 sec)
+
+mysql> FROM Address_book;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM Address_book' at line 1
+mysql> insert into Address_book(fname, lname, city, state, zip, phone, email) values
+    -> ('monika', 'mhaske',  'pune', 'maharashtara', 414604, 8830503111, 'monikamhaske46.com' );
+Query OK, 1 row affected (0.02 sec)
+
+mysql> update  Address_book set type='Friends' where id =1;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from address_book;
++----+--------+--------+---------+--------+--------------+--------+------------+--------------------------+
+| id | fname  | lname  | type    | city   | state        | zip    | phone      | email                    |
++----+--------+--------+---------+--------+--------------+--------+------------+--------------------------+
+|  1 | monika | mhaske | Friends | pune   | Maharashtra  | 414604 | 8830503111 | monikamhaske46@gmail.com |
+|  3 | mayuri | mule   | Friends | Mumbai | Krnataka     | 564578 | 6785457234 | mayurim23@gmail.com      |
+|  4 | monika | mhaske | NULL    | pune   | maharashtara | 414604 | 8830503111 | monikamhaske46.com       |
++----+--------+--------+---------+--------+--------------+--------+------------+--------------------------+
+3 rows in set (0.00 sec)
+
+#drop database AddressBook_services;
+
+
+
